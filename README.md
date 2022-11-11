@@ -7,6 +7,7 @@ It follows the implementation detailed in [K97](https://arxiv.org/abs/astro-ph/9
 Install
 ```julia
 using Pkg
+Pkg.add(url="https://github.com/komatsu5147/MatterPower.jl")
 Pkg.add(url="https://github.com/tos-1/JPmesh.jl") # for linear P(k) and growth
 ```
 
