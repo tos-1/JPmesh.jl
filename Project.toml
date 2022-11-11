@@ -1,0 +1,10 @@
+name = "JPmesh"
+uuid = "27213fb9-555a-4db3-9e4f-03b8abf59ab9"
+authors = ["Federico Tosone <tosone.uni@gmail.com>"]
+version = "0.1.0"
+
+[deps]
+FFTW = "7a1cc6ca-52ef-59f5-83cd-3a7055c09341"
+JLD = "4138dd39-2aa7-5051-a626-17a0bb65d9c8"
+MatterPower = "743831d1-0e6a-4e86-a0c4-1a098a68aca3"
+Random = "9a3f8284-a2c9-5f02-9a11-845980a1fd5c"
