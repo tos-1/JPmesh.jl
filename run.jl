@@ -1,7 +1,6 @@
 ####################
 #particle mesh code
 ####################
-push!(LOAD_PATH, "./src/")
 using JPmesh
 using Plots
 

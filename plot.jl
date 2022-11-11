@@ -1,7 +1,5 @@
 # create gif of evolution
-
-push!(LOAD_PATH, "./src/")
-include("src/grid.jl")
+using JPmesh
 using LaTeXStrings
 using JLD
 using Plots

@@ -4,19 +4,15 @@ Simple Particle Mesh code in Julia for LambdaKCDM cosmology.
 It follows the implementation detailed in [K97](https://arxiv.org/abs/astro-ph/9712217) (see also [K17](https://www.worldscientific.com/doi/10.1142/9789813231962_0002)).
 
 ## Installation
-It requires to install the following packages
+Install
 ```julia
-Pkg.add(url="https://github.com/komatsu5147/MatterPower.jl") # for linear P(k) and growth
-Pkg.add("JLD")  # to save
-Pkg.add("FFTW")
+using Pkg
+Pkg.add(url="https://github.com/tos-1/JPmesh.jl") # for linear P(k) and growth
 ```
-
-Just download the files and call the `JPmesh` module, you can run the code in the `src/` folder, or in its parent directory, as shown below.
 
 ## Example
 An example of a run
 ```julia
-push!(LOAD_PATH, "./src/")
 using JPmesh
 using Plots
 
