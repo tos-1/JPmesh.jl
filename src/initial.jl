@@ -13,9 +13,9 @@ function Gaussimple(simbox::SimBox)::Array{Complex{SimBox().prec}, 3}
 
     kmin = 2 * pi / boxsize
     for i in 1:div(ng,2)+1, j in 1:ng, k in 1:ng
-          kx = if i<=div(ng,2)+1 i-1 else (i-1-ng) end
-          ky = if j<=div(ng,2)+1 j-1 else (j-1-ng) end
-          kz = if k<=div(ng,2)+1 k-1 else (k-1-ng) end
+          kx = if i<div(ng,2)+1 i-1 else (i-1-ng) end
+          ky = if j<div(ng,2)+1 j-1 else (j-1-ng) end
+          kz = if k<div(ng,2)+1 k-1 else (k-1-ng) end
 	  ksum = sqrt(kx^2 + ky^2 + kz^2)*kmin
 	  pk[i,j,k] = simbox.s8 * (ksum / kmin)^(-simbox.ns)
     end
@@ -26,7 +26,7 @@ function Gaussimple(simbox::SimBox)::Array{Complex{SimBox().prec}, 3}
     d = randn(rng, simbox.prec, (ng, ng, ng))
     dk = rfft(d)
     dk .*= sqrt.(pk) .* ng^1.5 / boxsize^1.5
-    rfft(irfft(dk,ng)) # make hermitian
+    irfft(dk,ng) 
 end
 
 "It returns the density field on the Fourier grid, Pk from EHU97.
@@ -43,14 +43,14 @@ function Gauss(simbox::SimBox)::Array{Complex{SimBox().prec}, 3}
 
     kmin = 2 * pi / boxsize
     for i in 1:div(ng,2)+1, j in 1:ng, k in 1:ng
-          kx = if i<=div(ng,2)+1 i-1 else (i-1-ng) end
-          ky = if j<=div(ng,2)+1 j-1 else (j-1-ng) end
-          kz = if k<=div(ng,2)+1 k-1 else (k-1-ng) end
+          kx = if i<div(ng,2)+1 i-1 else (i-1-ng) end
+          ky = if j<div(ng,2)+1 j-1 else (j-1-ng) end
+          kz = if k<div(ng,2)+1 k-1 else (k-1-ng) end
 	  ksum = sqrt(kx^2 + ky^2 + kz^2)*kmin
 	  dk[i,j,k] *= sqrt(pk(ksum)) * ng^1.5 / boxsize^1.5
     end
     dk[1,1,1] = 0.0
-    rfft(irfft(dk,ng)) # make hermitian
+    irfft(dk,ng) 
 end
 
 "Anti-divergence operator in Fourier space. Divergence in Fourier space as input."
@@ -64,9 +64,9 @@ function invdiv(psik::Array{T, 3}, simbox::SimBox) where{T<:Complex}
     phicz = Array{T, 3}(undef, div(ng,2)+1, ng, ng)
 
     for i in 1:div(ng,2)+1, j in 1:ng, k in 1:ng
-        kx = if i<=div(ng,2)+1 i-1 else (i-1-ng) end
-        ky = if j<=div(ng,2)+1 j-1 else (j-1-ng) end
-        kz = if k<=div(ng,2)+1 k-1 else (k-1-ng) end
+        kx = if i<div(ng,2)+1 i-1 else (i-1-ng) end
+        ky = if j<div(ng,2)+1 j-1 else (j-1-ng) end
+        kz = if k<div(ng,2)+1 k-1 else (k-1-ng) end
         kk = sqrt(kx^2+ky^2+kz^2) * kmin
         phicx[i,j,k] = -1im * kx * kmin * psik[i,j,k]/kk^2
         phicy[i,j,k] = -1im * ky * kmin * psik[i,j,k]/kk^2
@@ -96,9 +96,9 @@ function twolpt(dk::Array{T, 3},simbox::SimBox)::Array{T,3} where{T<:Complex}
     phicyz = Array{T, 3}(undef, div(ng,2)+1, ng, ng)
     phiczz = Array{T, 3}(undef, div(ng,2)+1, ng, ng)
     for i in 1:div(ng,2)+1, j in 1:ng, k in 1:ng
-        kx = if i<=div(ng,2)+1 i-1 else (i-1-ng) end
-        ky = if j<=div(ng,2)+1 j-1 else (j-1-ng) end
-        kz = if k<=div(ng,2)+1 k-1 else (k-1-ng) end
+        kx = if i<div(ng,2)+1 i-1 else (i-1-ng) end
+        ky = if j<div(ng,2)+1 j-1 else (j-1-ng) end
+        kz = if k<div(ng,2)+1 k-1 else (k-1-ng) end
         kk = sqrt(kx^2+ky^2+kz^2)
         phicxx[i,j,k] = kx * kx * dk[i,j,k]/kk^2
         phicxy[i,j,k] = kx * ky * dk[i,j,k]/kk^2
@@ -187,18 +187,3 @@ function InitialConditions(simbox::SimBox)::Tuple{ Vector{Vector{SimBox().prec}}
     vel = [ reshape(vel[1],ng^3), reshape(vel[2],ng^3), reshape(vel[3],ng^3) ]
     return pos, vel
 end
-
-#simbox = SimBox(ng=128, boxsize=250.0, z=0)
-#dk=Gauss(simbox)
-#den=irfft(dk, 128)
-#display( heatmap( 1:size(den,1), 1:size(den,2), den[:,:,2]) )
-#gui()
-#pos, vel = InitialConditions(simbox)
-#den = CiC(pos, simbox.ng, simbox.boxsize);
-#display( heatmap( 1:size(den,1), 1:size(den,2), den[:,:,2]) )
-#gui()
-#display( heatmap( 1:size(d,1), 1:size(d,2), d[:,:,32]) )
-#psi,vel = InitialConditions(0.001,0.7,0.3,32,100.,10.0,-3.0,12)
-#println(typeof(psi), axes(psi))
-#println(typeof(psi[1]), axes(psi[1]))
-

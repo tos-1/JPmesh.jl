@@ -18,9 +18,9 @@ function poisson(pos::Vector{Vector{T}}, a::AbstractFloat, simbox::SimBox)::Arra
 
     # Eq.(25) of K17, dk the potential
     for i in 1:ng02+1, j in 1:ng, k in 1:ng
-       kx = if i<=ng02+1 i-1 else (i-1-ng) end
-       ky = if j<=ng02+1 j-1 else (j-1-ng) end
-       kz = if k<=ng02+1 k-1 else (k-1-ng) end
+       kx = if i<ng02+1 i-1 else (i-1-ng) end
+       ky = if j<ng02+1 j-1 else (j-1-ng) end
+       kz = if k<ng02+1 k-1 else (k-1-ng) end
        Gk = 0.5 * (boxsize/ng)^2  * ( cos(pi * kx/ng02) + cos(pi * ky/ng02) + cos(pi * kz/ng02) -3 )^(-1)
        dk[i,j,k] *= Gk
     end
